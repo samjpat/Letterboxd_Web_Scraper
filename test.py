@@ -4,7 +4,7 @@ import json
 import sqlite3
 
 
-link = 'https://letterboxd.com/film/barbie/'
+link = 'https://letterboxd.com/film/everything-everywhere-all-at-once/'
 
 name = ""
 director = ""
@@ -35,17 +35,16 @@ script_w_data = soup.select_one('script[type="application/ld+json"]')
 json_obj = json.loads(script_w_data.text.split(' */')[1].split('/* ]]>')[0])
 image = json_obj['image']
 
-rating = soup.find(class_ = "tooltip display-rating").text
-print(rating)
 
-#print(name)
-#print(year)
-#print(director)
-#for temp in cast:
-#    print(temp)
-#for temp in genres:
-#    print(temp)
-#print(image)
+
+print(name)
+print(year)
+print(director)
+for temp in cast:
+    print(temp)
+for temp in genres:
+    print(temp)
+print(image)
 
 #sql_statements = [
 #    """CREATE TABLE IF NOT EXISTS movie (

@@ -4,8 +4,8 @@ from scrape import scrape
 from scrape import page_scrape
 
 sql_statements = [
-    """CREATE TABLE IF NOT EXISTS movie_db (
-            movie_id INT AUTO_INCREMENT PRIMARY KEY,
+    """CREATE TABLE movie_db (
+            movie_id INTEGER PRIMARY KEY,
             name TEXT,
             year INT,
             rating INT,
@@ -15,30 +15,30 @@ sql_statements = [
         );""",
 
     
-    """CREATE TABLE IF NOT EXISTS actor_db (
-            actor_id INT AUTO_INCREMENT PRIMARY KEY,
+    """CREATE TABLE actor_db (
+            actor_id INTEGER PRIMARY KEY,
             name TEXT UNIQUE
         
         );""",
 
         
-    """CREATE TABLE IF NOT EXISTS movie_to_actor (
-            movie_id INT PRIMARY KEY,
-            actor_id INT PRIMARY KEY,
+    """CREATE TABLE movie_to_actor (
+            movie_id INTEGER,
+            actor_id INTEGER,
             FOREIGN KEY (movie_id) REFERENCES movie_db(movie_id),
             FOREIGN KEY (actor_id) REFERENCES actor_db(actor_id)
           
         );""",
 
-    """CREATE TABLE IF NOT EXISTS genre_db (
-            genre_id INT AUTO_INCREMENT PRIMARY KEY,
+    """CREATE TABLE genre_db (
+            genre_id INTEGER PRIMARY KEY,
             name TEXT UNIQUE
                 
         );""",
 
-    """CREATE TABLE IF NOT EXISTS movie_to_genre (
-            movie_id INT PRIMARY KEY,
-            genre_id INT PRIMARY KEY,
+    """CREATE TABLE movie_to_genre (
+            movie_id INTEGER,
+            genre_id INTEGER,
             FOREIGN KEY (movie_id) REFERENCES movie_db(movie_id),
             FOREIGN KEY (genre_id) REFERENCES genre_db(genre_id)
         
@@ -69,20 +69,19 @@ def main():
 
 
 
-    page_format = "https://letterboxd.com/films/popular/"
+    page_format = "https://letterboxd.com/films/popular/page/2/"
 
     
     link = page_format
 
     #for i in range(1):
     #    if(i > 1):
-    #        link = link + "page/" + i + "/"
+    #    link = link + "page/" + i + "/"
     #    movie_titles = page_get(link)
     #    page_scrape(movie_titles)
 
-    movies = page_get(link)
-    page_scrape(movies)
-
+    movie_titles = page_get(link)
+    page_scrape(movie_titles)
 
 if __name__ == "__main__":
     main()
