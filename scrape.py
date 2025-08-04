@@ -79,31 +79,25 @@ def scrape(conn, link, rating):
     cur.execute(sql)
     movie_id = cur.fetchone()[0]
 
-    sql = '''SELECT COUNT(*) FROM genre_db'''
-    cur = conn.cursor()
-    cur.execute(sql)
-    genre_id = cur.fetchone()[0]
-    genre_id = genre_id + 1
-
+    
     for genre in genres:
         sql = '''INSERT OR IGNORE INTO genre_db(name) VALUES(?)'''
         cur = conn.cursor()
         cur.execute(sql, [genre])
         conn.commit()
 
+        sql = '''SELECT genre_id FROM genre_db WHERE name = ?'''
+        cur = conn.cursor()
+        cur.execute(sql, (genre,))
+        genre_id = cur.fetchone()[0]
+
         sql = '''INSERT INTO movie_to_genre (movie_id, genre_id) VALUES(?, ?)'''
         info = (movie_id, genre_id)
         cur = conn.cursor()
         cur.execute(sql, info)
         conn.commit()
-        genre_id = genre_id + 1
 
-        
-    sql = '''SELECT COUNT(*) FROM actor_db'''
-    cur = conn.cursor()
-    cur.execute(sql)
-    actor_id = cur.fetchone()[0]   
-    actor_id = actor_id + 1 
+
 
     for actor in cast:
         sql = '''INSERT OR IGNORE INTO actor_db(name) VALUES(?)'''
@@ -111,12 +105,16 @@ def scrape(conn, link, rating):
         cur.execute(sql, [actor])
         conn.commit()
 
+        sql = '''SELECT actor_id FROM actor_db WHERE name = ?'''
+        cur = conn.cursor()
+        cur.execute(sql, (actor,))
+        actor_id = cur.fetchone()[0]
+
         sql = '''INSERT INTO movie_to_actor (movie_id, actor_id) VALUES(?, ?)'''
         info = (movie_id, actor_id)
         cur = conn.cursor()
         cur.execute(sql, info)
         conn.commit()
-        actor_id = actor_id + 1
 
         
 

@@ -68,8 +68,8 @@ def main():
         print("Failed to open database:", e)
 
 
-    link = "https://letterboxd.com/film/interstellar/"
-    scrape(conn, link, 4.42)
+    link = "https://letterboxd.com/film/la-la-land/"
+    scrape(conn, link, 4.12)
 
     #statement = '''DELETE FROM movie_db'''
     #cur = conn.cursor()
