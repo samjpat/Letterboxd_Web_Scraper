@@ -11,13 +11,11 @@ def movie_call(conn, option):
     return rows
 
 
-
-
 def actor_call(conn, option):
     cur = conn.cursor()
     cur.execute('SELECT actor_id FROM actor_db WHERE name = ?', (option,))
     row = cur.fetchone()
-    id = row
+    id = row[0]
     sql = 'SELECT name, year, image FROM movie_db JOIN movie_to_actor ON movie_db.movie_id = movie_to_actor.movie_id WHERE movie_to_actor.actor_id = ?'
     cur.execute(sql, (id,))
     rows = cur.fetchall()
@@ -42,7 +40,6 @@ def director_call(conn, option):
     rows = cur.fetchall()
     conn.commit()
     return rows
-
 
 
 def main():
@@ -74,7 +71,8 @@ def main():
     st.title("Movie Recommendations")
     type = st.selectbox("Method of reccomendation: ",
                         ['Actor', 'Movie', 'Genre', 'Director'])
-    result = []
+    
+    
 
     if type == 'Movie':
         option = st.selectbox("Movie: ", movies, index = None, placeholder = "Enter a movie...")
@@ -84,30 +82,66 @@ def main():
         option = st.selectbox("Genre: ", genres, index = None, placeholder = "Enter an genre...")
     else:
         option = st.selectbox("Director: ", directors, index = None, placeholder = "Enter a director...")
- 
-    if st.button("Enter"):
+         
+    enter = st.button("Enter")
+    col1, col2, col3 = st.columns(3)
+
+
+    if enter:
+        if "result" not in st.session_state:
+            st.session_state.result = []
+        
+        if "movie_num" not in st.session_state:
+            st.session_state.movie_num = 0
+
         if type == 'Movie':
-            result = movie_call(conn, option)
+            st.session_state.result = movie_call(conn, option)
         elif type == 'Actor':
-            result = actor_call(conn, option)
+            st.session_state.result = actor_call(conn, option)
         elif type == 'Genre':
-            result = genre_call(conn, option)
+            st.session_state.result = genre_call(conn, option)
         else:
-            result = director_call(conn, option)
+            st.session_state.result = director_call(conn, option)
 
-        col1, col2, col3 = st.columns(3)
         with col1:
-            st.image(result[0][2], width=200)
-            st.text(f"{result[0][0]}  ({result[0][1]})")
+            if len(st.session_state.result) > 0:
+                st.image(st.session_state.result[0][2], width=200)
+                st.text(f"{st.session_state.result[0][0]}  ({st.session_state.result[0][1]})")
         with col2:
-            st.image(result[1][2], width=200)
-            st.text(f"{result[1][0]}  ({result[1][1]})")
+            if len(st.session_state.result) > 1:
+                st.image(st.session_state.result[1][2], width=200)
+                st.text(f"{st.session_state.result[1][0]}  ({st.session_state.result[1][1]})")
         with col3:
-            st.image(result[2][2], width=200)
-            st.text(f"{result[2][0]}  ({result[2][1]})")
+            if len(st.session_state.result) > 2:
+                st.image(st.session_state.result[2][2], width=200)
+                st.text(f"{st.session_state.result[2][0]}  ({st.session_state.result[2][1]})")
 
-    st.button("New Recommendations")
 
+    if st.button("New Recommendations"):
+        #if type == 'Movie':
+        #    result = movie_call(conn, option)
+        #elif type == 'Actor':
+        #    result = actor_call(conn, option)
+        #elif type == 'Genre':
+        #    result = genre_call(conn, option)
+        #else:
+        #    result = director_call(conn, option)
+        
+        
+        st.session_state.movie_num =  st.session_state.movie_num + 3
+        
+        with col1:
+            if len(st.session_state.result) > st.session_state.movie_num:
+                st.image(st.session_state.result[st.session_state.movie_num][2], width=200)
+                st.text(f"{st.session_state.result[st.session_state.movie_num][0]}  ({st.session_state.result[st.session_state.movie_num][1]})")
+        with col2:
+            if len(st.session_state.result) > st.session_state.movie_num+1:
+                st.image(st.session_state.result[st.session_state.movie_num+1][2], width=200)
+                st.text(f"{st.session_state.result[st.session_state.movie_num+1][0]}  ({st.session_state.result[st.session_state.movie_num+1][1]})")
+        with col3:
+            if len(st.session_state.result) > st.session_state.movie_num+2:
+                st.image(st.session_state.result[st.session_state.movie_num+2][2], width=200)
+                st.text(f"{st.session_state.result[st.session_state.movie_num+2][0]}  ({st.session_state.result[st.session_state.movie_num+2][1]})")
 
 
 
