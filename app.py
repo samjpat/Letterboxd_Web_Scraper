@@ -16,7 +16,7 @@ def actor_call(conn, option):
     cur.execute('SELECT actor_id FROM actor_db WHERE name = ?', (option,))
     row = cur.fetchone()
     id = row[0]
-    sql = 'SELECT name, year, image FROM movie_db JOIN movie_to_actor ON movie_db.movie_id = movie_to_actor.movie_id WHERE movie_to_actor.actor_id = ?'
+    sql = 'SELECT name, year, image FROM movie_db JOIN movie_to_actor ON movie_db.movie_id = movie_to_actor.movie_id WHERE movie_to_actor.actor_id = ? ORDER BY rating DESC'
     cur.execute(sql, (id,))
     rows = cur.fetchall()
     conn.commit()
@@ -28,7 +28,7 @@ def genre_call(conn, option):
     cur.execute('SELECT genre_id FROM genre_db WHERE name = ?', (option,))
     row = cur.fetchone()
     id = row[0]
-    sql = 'SELECT name, year, image FROM movie_db JOIN movie_to_genre ON movie_db.movie_id = movie_to_genre.movie_id WHERE movie_to_genre.genre_id = ?'
+    sql = 'SELECT name, year, image FROM movie_db JOIN movie_to_genre ON movie_db.movie_id = movie_to_genre.movie_id WHERE movie_to_genre.genre_id = ? ORDER BY rating DESC'
     cur.execute(sql, (id,))
     rows = cur.fetchall()
     conn.commit()
@@ -36,7 +36,7 @@ def genre_call(conn, option):
 
 def director_call(conn, option):
     cur = conn.cursor()
-    cur.execute('SELECT name, year, image FROM movie_db WHERE director = ?', (option,))
+    cur.execute('SELECT name, year, image FROM movie_db WHERE director = ? ORDER BY rating DESC', (option,))
     rows = cur.fetchall()
     conn.commit()
     return rows
