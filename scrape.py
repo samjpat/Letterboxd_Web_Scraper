@@ -15,9 +15,9 @@ def page_get(link):
     driver.get(link)
     sleep(0.5)
     soup = BeautifulSoup(driver.page_source, "lxml")
-    info = soup.find_all('li', class_ = 'listitem poster-container')
+    info = soup.find_all('li', class_ = 'posteritem')
     for item in info:
-        movie_titles.append((item.find('div')['data-film-slug'], item.find('a')['data-original-title'][-4:]))
+        movie_titles.append((item.find('div')['data-item-slug'], item.find('a')['data-original-title'][-4:]))
     driver.quit()
     return movie_titles
 
@@ -118,10 +118,10 @@ def scrape(conn, link, rating):
     
 
     
-def page_scrape(movie_titles):
+def page_scrape(conn, movie_titles):
     link_format = "https://letterboxd.com/film/"
     for title in movie_titles:
         link = link_format + title[0] + '/'
-        scrape(link, title[1])
+        scrape(conn, link, title[1])
 
 

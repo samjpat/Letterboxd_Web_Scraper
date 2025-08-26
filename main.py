@@ -127,7 +127,7 @@ def main():
     #    page_scrape(movie_titles)
 
     movie_titles = page_get(link)
-    page_scrape(movie_titles)
+    page_scrape(conn, movie_titles)
     
     conn.close()
 

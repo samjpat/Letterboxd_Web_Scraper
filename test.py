@@ -2,49 +2,64 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import sqlite3
-
-
-link = 'https://letterboxd.com/film/everything-everywhere-all-at-once/'
-
-name = ""
-director = ""
-cast = []
-genres = []
-image = ''
-
-response = requests.get(link)
-soup = BeautifulSoup(response.content, 'html.parser')
-
-name = soup.find(class_ = 'name js-widont prettify').text
-year = soup.find(class_ = 'releasedate').text
-director = soup.find(class_ = 'creatorlist').text
-
-count = 0
-cast_soup = soup.find('div', {'class': 'cast-list text-sluglist'})
-for temp in cast_soup.find_all('a', {'class': 'text-slug tooltip'}):
-    cast.append(temp.text)
-    if count > 15:
-        break
-    count = count + 1
-
-genre_soup = soup.find('div', {'class': 'text-sluglist capitalize'})
-for temp in genre_soup.find_all('a', {'class': 'text-slug'}):
-    genres.append(temp.text)
-
-script_w_data = soup.select_one('script[type="application/ld+json"]')
-json_obj = json.loads(script_w_data.text.split(' */')[1].split('/* ]]>')[0])
-image = json_obj['image']
+from selenium.webdriver import Firefox
+from selenium.webdriver.common.by import By
+from time import sleep
+from bs4 import BeautifulSoup
+import requests
+import json
+import sqlite3
+import random
 
 
 
-print(name)
-print(year)
-print(director)
-for temp in cast:
-    print(temp)
-for temp in genres:
-    print(temp)
-print(image)
+link = "https://letterboxd.com/films/popular/page/2/"
+
+driver = Firefox()
+movie_titles = []
+driver.get(link)
+sleep(0.5)
+soup = BeautifulSoup(driver.page_source, "lxml")
+info = soup.find_all('li', class_ = 'posteritem')
+for item in info:
+    movie_titles.append((item.find('div')['data-item-slug'], item.find('a')['data-original-title'][-4:]))
+driver.quit()
+
+
+
+
+
+#link = 'https://letterboxd.com/film/everything-everywhere-all-at-once/'
+
+#name = ""
+#director = ""
+#cast = []
+#genres = []
+#image = ''
+
+#response = requests.get(link)
+#soup = BeautifulSoup(response.content, 'html.parser')
+
+#name = soup.find(class_ = 'name js-widont prettify').text
+#year = soup.find(class_ = 'releasedate').text
+#director = soup.find(class_ = 'creatorlist').text
+
+#count = 0
+#cast_soup = soup.find('div', {'class': 'cast-list text-sluglist'})
+#for temp in cast_soup.find_all('a', {'class': 'text-slug tooltip'}):
+#    cast.append(temp.text)
+#    if count > 15:
+#        break
+#    count = count + 1
+
+#genre_soup = soup.find('div', {'class': 'text-sluglist capitalize'})
+#for temp in genre_soup.find_all('a', {'class': 'text-slug'}):
+#    genres.append(temp.text)
+
+#script_w_data = soup.select_one('script[type="application/ld+json"]')
+#json_obj = json.loads(script_w_data.text.split(' */')[1].split('/* ]]>')[0])
+#image = json_obj['image']
+
 
 #sql_statements = [
 #    """CREATE TABLE IF NOT EXISTS movie (
