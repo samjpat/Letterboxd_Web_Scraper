@@ -68,8 +68,10 @@ def main():
         print("Failed to open database:", e)
 
 
-    #link = "https://letterboxd.com/film/joker-2019/"
-    #scrape(conn, link, 3.84)
+   
+    #link = "https://letterboxd.com/film/the-lord-of-the-rings-the-fellowship-of-the-ring/"
+    #scrape(conn, link, 4.38)
+
 
     #statement = '''DELETE FROM movie_db'''
     #cur = conn.cursor()
@@ -113,17 +115,10 @@ def main():
     #cur.execute(statement)
     #conn.commit()
 
-
-
-
-    conn.close()
-
-
-
-    #page_format = "https://letterboxd.com/films/popular/page/2/"
+    page_format = "https://letterboxd.com/films/popular/page/2/"
 
     
-    #link = page_format
+    link = page_format
 
     #for i in range(1):
     #    if(i > 1):
@@ -131,8 +126,11 @@ def main():
     #    movie_titles = page_get(link)
     #    page_scrape(movie_titles)
 
-    #movie_titles = page_get(link)
-    #page_scrape(movie_titles)
+    movie_titles = page_get(link)
+    page_scrape(movie_titles)
+    
+    conn.close()
+
 
 if __name__ == "__main__":
     main()

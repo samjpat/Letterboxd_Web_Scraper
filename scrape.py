@@ -22,19 +22,18 @@ def page_get(link):
     return movie_titles
 
 def scrape(conn, link, rating):
-    #print("Scraping", link)
     name = ""
     director = ""
     cast = []
     genres = []
     image = ''
     
-    sleep(random.uniform(1, 5))
+    sleep(random.uniform(0, 5))
     response = requests.get(link)
     soup = BeautifulSoup(response.content, 'html.parser')
 
     name = soup.find(class_ = 'name js-widont prettify').text
-    sleep(random.uniform(1, 5))
+    sleep(random.uniform(0, 5))
     year = soup.find(class_ = 'releasedate').text
     director = soup.find(class_ = 'creatorlist').text
 
@@ -47,7 +46,7 @@ def scrape(conn, link, rating):
             break
         count = count + 1
 
-    sleep(random.uniform(1, 5))
+    sleep(random.uniform(0, 5))
 
 
     genre_soup = soup.find('div', {'class': 'text-sluglist capitalize'})
@@ -59,9 +58,7 @@ def scrape(conn, link, rating):
     json_obj = json.loads(script_w_data.text.split(' */')[1].split('/* ]]>')[0])
     image = json_obj['image']
 
-    #print("Scraped ", name)
-
-    sleep(random.uniform(1, 5))
+    sleep(random.uniform(0, 5))
         
     sql = ''' INSERT INTO movie_db(name, year, rating, director, image)
               VALUES(?,?,?,?,?) '''
