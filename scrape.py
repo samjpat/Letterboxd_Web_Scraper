@@ -115,9 +115,6 @@ def scrape(conn, link, rating):
 
         
 
-    
-
-    
 def page_scrape(conn, movie_titles):
     link_format = "https://letterboxd.com/film/"
     for title in movie_titles:
