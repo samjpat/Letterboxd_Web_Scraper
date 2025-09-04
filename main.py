@@ -115,7 +115,7 @@ def main():
     #cur.execute(statement)
     #conn.commit()
 
-    page_format = "https://letterboxd.com/films/popular/page/3/"
+    page_format = "https://letterboxd.com/films/popular/page/4/"
 
     
     link = page_format
