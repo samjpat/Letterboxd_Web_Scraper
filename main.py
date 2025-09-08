@@ -69,8 +69,8 @@ def main():
 
 
    
-    #link = "https://letterboxd.com/film/the-lord-of-the-rings-the-fellowship-of-the-ring/"
-    #scrape(conn, link, 4.38)
+    link = "https://letterboxd.com/film/flow-2024/"
+    scrape(conn, link, 4.09)
 
 
     #statement = '''DELETE FROM movie_db'''
@@ -115,10 +115,10 @@ def main():
     #cur.execute(statement)
     #conn.commit()
 
-    page_format = "https://letterboxd.com/films/popular/page/4/"
+    #page_format = "https://letterboxd.com/films/popular/page/4/"
 
     
-    link = page_format
+    #link = page_format
 
     #for i in range(1):
     #    if(i > 1):
@@ -126,8 +126,8 @@ def main():
     #    movie_titles = page_get(link)
     #    page_scrape(movie_titles)
 
-    movie_titles = page_get(link)
-    page_scrape(conn, movie_titles)
+    #movie_titles = page_get(link)
+    #page_scrape(conn, movie_titles)
     
     conn.close()
 

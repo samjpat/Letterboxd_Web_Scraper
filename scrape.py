@@ -39,12 +39,13 @@ def scrape(conn, link, rating):
 
     cast_soup = soup.find('div', {'class': 'cast-list text-sluglist'})
     count = 0
-    for temp in cast_soup.find_all('a', {'class': 'text-slug tooltip'}):
-        sleep(random.uniform(0, .8))
-        cast.append(temp.text)
-        if count > 13:
-            break
-        count = count + 1
+    if cast_soup != None:
+        for temp in cast_soup.find_all('a', {'class': 'text-slug tooltip'}):
+            sleep(random.uniform(0, .8))
+            cast.append(temp.text)
+            if count > 13:
+                break
+            count = count + 1
 
     sleep(random.uniform(0, 5))
 
