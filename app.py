@@ -3,19 +3,6 @@ import sqlite3
 import itertools
 
 
-def movie_call(conn, option):
-    cur = conn.cursor()
-    cur.execute('SELECT director FROM movie_db WHERE name = ?', (option,))
-    director = cur.fetchone()
-
-
-
-
-    cur.execute('SELECT name, year, image FROM movie_db WHERE director = ?', (option,))
-    rows = cur.fetchmany(8)
-
-    conn.commit()
-    return rows
 
 
 def actor_call(conn, option):
@@ -35,7 +22,7 @@ def genre_call(conn, option):
     cur.execute('SELECT genre_id FROM genre_db WHERE name = ?', (option,))
     row = cur.fetchone()
     id = row[0]
-    sql = 'SELECT name, year, image FROM movie_db JOIN movie_to_genre ON movie_db.movie_id = movie_to_genre.movie_id WHERE movie_to_genre.genre_id = ? ORDER BY rating DESC'
+    sql = 'SELECT name, year, image, rating FROM movie_db JOIN movie_to_genre ON movie_db.movie_id = movie_to_genre.movie_id WHERE movie_to_genre.genre_id = ? ORDER BY rating DESC'
     cur.execute(sql, (id,))
     rows = cur.fetchall()
     conn.commit()
@@ -49,7 +36,7 @@ def genre_call_double(conn, option, option2):
     cur.execute('SELECT genre_id FROM genre_db WHERE name = ?', (option2,))
     row = cur.fetchone()
     genre_id2 = row[0]
-    sql = 'SELECT movie_db.name, movie_db.year, movie_db.image FROM movie_db ' \
+    sql = 'SELECT movie_db.name, movie_db.year, movie_db.image, movie_db.rating FROM movie_db ' \
           'JOIN movie_to_genre ON movie_db.movie_id = movie_to_genre.movie_id ' \
           'WHERE movie_to_genre.genre_id = ? OR movie_to_genre.genre_id = ? ' \
           'GROUP BY 1 ' \
@@ -96,13 +83,11 @@ def main():
 
     st.title("Movie Recommendations")
     type = st.selectbox("Method of reccomendation: ",
-                        ['Actor', 'Movie', 'Genre', 'Director'])
+                        ['Actor', 'Genre', 'Director'])
     
     
 
-    if type == 'Movie':
-        option = st.selectbox("Movie: ", movies, index = None, placeholder = "Enter a movie...")
-    elif type == 'Actor':
+    if type == 'Actor':
         option = st.selectbox("Actor: ", actors, index = None, placeholder = "Enter an actor...")
     elif type == 'Genre':
         col1, col2 = st.columns(2)
@@ -121,12 +106,11 @@ def main():
         if "result" not in st.session_state:
             st.session_state.result = []
         
-        if "movie_num" not in st.session_state:
-            st.session_state.movie_num = 0
+        #if "movie_num" not in st.session_state:
+        st.session_state.movie_num = 0
 
-        if type == 'Movie':
-            st.session_state.result = movie_call(conn, option)
-        elif type == 'Actor':
+        
+        if type == 'Actor':
             st.session_state.result = actor_call(conn, option)
         elif type == 'Genre':
             if option2 == None:
