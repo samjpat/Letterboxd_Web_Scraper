@@ -68,10 +68,6 @@ def scrape(conn, link, rating):
     cur.execute(sql, movie)
     conn.commit()
 
-    #cur = conn.execute("SELECT movie_id from movie_db WHERE name = ?", (name,))
-    #conn.commit()
-    #movie_id = cur[0]
-
     sql = '''SELECT COUNT(*) FROM movie_db'''
     cur = conn.cursor()
     cur.execute(sql)
